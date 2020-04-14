@@ -36,12 +36,10 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const carData = req.body;
-  db('cars').insert(carData)
-  .then(ids => {
-    db('cars').where({ id: ids[0] })
+  db('cars')
+    .insert(carData)
     .then(newCarEntry => {
       res.status(201).json(newCarEntry);
-    });
   })
   .catch (err => {
     console.log('POST error', err);
