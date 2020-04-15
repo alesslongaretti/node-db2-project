@@ -47,4 +47,40 @@ router.post('/', (req, res) => {
   });
 });
 
+router.put('/:id', (req,res) => {
+  const {id} = req.params;
+  const changes = req.body;
+
+  db('cars')
+      .where({id})
+      .update(changes)
+      .then(count => {
+          if(count){
+              res.json({ updated: count})
+          } else {
+              res.status(404).json({ message: "invalid id"})
+          }
+      })
+      .catch(err => {
+          res.status(500).json({ message: "error updating", err})
+      });
+});
+
+router.delete('/:id', (req,res) => {
+  db('cars')
+      .where({ id: req.params.id})
+      .del()
+      .then(count => {
+          if(count > 0){
+              res.json({ message: 'car deleted successfully'})
+          } else {
+              res.status(400).json({ message: "car not found"})
+          }
+      })
+      .catch(err => {
+          res.status(500).json({ message: "error deleting", err})
+      });
+});
+
+
 module.exports = router;
